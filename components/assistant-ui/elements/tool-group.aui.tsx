@@ -101,7 +101,7 @@ function ToolGroupTrigger({
   count: number;
   active?: boolean;
 }) {
-  const label = `${count} tool ${count === 1 ? "call" : "calls"}`;
+  const label = `${count} Tool${count === 1 ? "-Aufruf" : "-Aufrufe"}`;
 
   return (
     <CollapsibleTrigger

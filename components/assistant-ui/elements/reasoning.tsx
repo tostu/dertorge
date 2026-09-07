@@ -192,7 +192,7 @@ function ReasoningTrigger({
           active && "shimmer motion-reduce:animate-none",
         )}
       >
-        Reasoning{durationText}
+        Überlegung{durationText}
       </span>
       <ChevronDownIcon
         data-slot="reasoning-trigger-chevron"

@@ -146,7 +146,7 @@ function FileName({
       className={cn("min-w-0 flex-1 truncate font-medium", className)}
       {...props}
     >
-      {children || "Unnamed file"}
+      {children || "Unbenannte Datei"}
     </span>
   );
 }

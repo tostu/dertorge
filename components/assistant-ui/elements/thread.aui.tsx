@@ -229,7 +229,7 @@ const ThreadWelcome: FC = () => {
       <img
         src="/torge-mad-scientist.png"
         alt="Torge"
-        className="fade-in slide-in-from-bottom-1 animate-in fill-mode-both mb-4 h-24 w-24 rounded-full object-cover duration-200"
+        className="fade-in slide-in-from-bottom-1 animate-in fill-mode-both mb-4 h-48 w-48 rounded-full object-cover duration-200"
       />
       <h1 className="aui-thread-welcome-message-inner fade-in slide-in-from-bottom-1 animate-in fill-mode-both text-2xl font-medium tracking-tight duration-200">
         How can I help you today?

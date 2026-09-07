@@ -22,6 +22,13 @@ export async function POST(req: Request) {
     tools?: Record<string, { description?: string; parameters: JSONSchema7 }>;
   } = await req.json();
 
+  if (!process.env.MISTRAL_API_KEY) {
+    console.error("MISTRAL_API_KEY is not set");
+    return new Response("Server misconfigured: missing MISTRAL_API_KEY", {
+      status: 500,
+    });
+  }
+
   const result = streamText({
     model: mistral("ministral-8b-latest"),
     messages: await convertToModelMessages(messages),
@@ -29,7 +36,16 @@ export async function POST(req: Request) {
       ...frontendTools(tools ?? {}),
     },
     system: system ?? TORGE_SYSTEM_PROMPT,
+    onError: ({ error }) => {
+      console.error("streamText error:", error);
+    },
   });
 
-  return result.toUIMessageStreamResponse();
+  return result.toUIMessageStreamResponse({
+    onError: (error) => {
+      console.error("toUIMessageStreamResponse error:", error);
+      if (error instanceof Error) return error.message;
+      return String(error);
+    },
+  });
 }

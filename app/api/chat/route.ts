@@ -1,5 +1,6 @@
-import { mistral } from "@ai-sdk/mistral";
+import { createMistral } from "@ai-sdk/mistral";
 import { frontendTools } from "@assistant-ui/ai-sdk";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import {
   streamText,
   convertToModelMessages,
@@ -22,12 +23,21 @@ export async function POST(req: Request) {
     tools?: Record<string, { description?: string; parameters: JSONSchema7 }>;
   } = await req.json();
 
-  if (!process.env.MISTRAL_API_KEY) {
+  // On Workers the binding lives in the Cloudflare env; process.env is only
+  // populated via nodejs_compat_populate_process_env, so read both.
+  const cfEnv = (await getCloudflareContext({ async: true })).env as unknown as
+    | Record<string, string | undefined>
+    | undefined;
+  const apiKey = cfEnv?.MISTRAL_API_KEY ?? process.env.MISTRAL_API_KEY;
+
+  if (!apiKey) {
     console.error("MISTRAL_API_KEY is not set");
     return new Response("Server misconfigured: missing MISTRAL_API_KEY", {
       status: 500,
     });
   }
+
+  const mistral = createMistral({ apiKey });
 
   const result = streamText({
     model: mistral("ministral-8b-latest"),
